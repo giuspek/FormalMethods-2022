@@ -1,3 +1,12 @@
+; *****************************************************************************************
+; In this solution, the definition of "even" is a bit different from the one expected:
+; in particular, in this case we consider the sum between the three digits and check if they are even or odd.\
+; While not exactly what requested (which has been correctly defined in file es_1.4b.smt2, I decided to maintain
+; this file so that you can see the encoding of this alternative condition, which has been efficiently 
+; provided.
+; *****************************************************************************************
+
+
 ;Summation of the numbers of the password must be even
 
 ;Variables: a1, a2, a3, b1, b2, b3, c1, c2, c3, d1, d2, d3
