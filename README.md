@@ -22,3 +22,15 @@ For people that asked me some links to easily learn the basics of Python, please
 - Solving Sudoku
 - Solving Nonogram
 - Functionalities: Incrementality and UNSAT cores
+
+## Lab 3
+
+- Using SMT-LIB: different data types
+- Solving logic puzzles using SMT
+- Solving geometric tasks
+- SAT/SMT functionalities: AllSAT/ALLSMT
+
+## Lab 4
+
+- Using BitVectors and Arrays
+- Uninterpreted vs interpreted functions
