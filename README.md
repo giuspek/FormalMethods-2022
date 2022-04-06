@@ -34,3 +34,10 @@ For people that asked me some links to easily learn the basics of Python, please
 
 - Using BitVectors and Arrays
 - Uninterpreted vs interpreted functions
+
+## Lab 5
+
+- OptiMathSAT: defining cost functions and different types of optimizations
+- Optimization of graph shortest paths
+- MaxSAT/MaxSMT
+- The importance of PseudoBoolean for SMT
