@@ -15,30 +15,36 @@
 ; First transition
 ; ********************
 
-(assert 
-	(=> 
+(assert
+	(=>
 		(= (select m 1) 0)
-		(and (= res (select y 1)) (= (store end 1 1) end))
+		(and
+			(= res (select y 1))
+			(= (store end 1 1) end)
+		)
 	)
 )
 
 (assert
-	(=> 
-		(and (not (= (select m 1) 0)) true)
-		(and 
+	(=>
+		(and
+			(not (= (select m 1) 0))
+			true
+		)
+		(and
 			(= (store end 1 0) end)
 			(= (store x 2 (select y 1)) x)
 			(= (store y 2 (select m 1)) y)
 			(= (store m 2 (mod (select x 2) (select y 2))) m)
-		) 
-	) 
+		)
+	)
 )
 
 ; If stopped, no other value would be stored in vectors
 (assert
 	(=>
 		(= (select end 1) 1)
-		(and 
+		(and
 			(= (store x 2 0) x)
 			(= (store y 2 0) y)
 			(= (store m 2 0) m)
@@ -53,29 +59,42 @@
 ; ********************
 
 
-(assert 
-	(=> 
-		(and (= (select m 2) 0) (= (select end 1) 0))
-		(and (= res (select y 2)) (= (store end 2 1) end))
+(assert
+	(=>
+		(and
+			(= (select end 1) 0)
+			(= (select m 2) 0)
+
+		)
+		(and
+			(= res (select y 2))
+			(= (store end 2 1) end)
+		)
 	)
 )
 
 (assert
-	(=> 
-		(and (not (= (select m 2) 0)) (= (select end 1) 0)) 
-		(and 
+	(=>
+		(and
+			(= (select end 1) 0)
+			(not (= (select m 2) 0))
+		)
+		(and
 			(= (store end 2 0) end)
 			(= (store x 3 (select y 2)) x)
 			(= (store y 3 (select m 2)) y)
 			(= (store m 3 (mod (select x 3) (select y 3))) m)
-		) 
-	) 
+		)
+	)
 )
 
 (assert
 	(=>
-		(or (= (select end 1) 1) (= (select end 2) 1))
-		(and 
+		(or
+			(= (select end 1) 1)
+			(= (select end 2) 1)
+		)
+		(and
 			(= (store x 3 0) x)
 			(= (store y 3 0) y)
 			(= (store m 3 0) m)
@@ -88,17 +107,28 @@
 ; Third transition
 ; ********************
 
-(assert 
-	(=> 
-		(and (= (select m 3) 0) (= (select end 1) 0) (= (select end 2) 0))
-		(and (= res (select y 3)) (= (store end 3 1) end))
+(assert
+	(=>
+		(and
+			(= (select end 1) 0)
+			(= (select end 2) 0)
+			(= (select m 3) 0)
+		)
+		(and
+			(= res (select y 3))
+			(= (store end 3 1) end)
+		)
 	)
 )
 
 (assert
 	(=>
-		(or (= (select end 1) 1) (= (select end 2) 1) (= (select end 3) 1))
-		(and 
+		(or
+			(= (select end 1) 1)
+			(= (select end 2) 1)
+			(= (select end 3) 1)
+		)
+		(and
 			(= (store x 4 0) x)
 			(= (store y 4 0) y)
 			(= (store m 4 0) m)
@@ -108,15 +138,19 @@
 )
 
 (assert
-	(=> 
-		(and (not (= (select m 3) 0)) (= (select end 1) 0) (= (select end 2) 0)) 
-		(and 
+	(=>
+		(and
+			(= (select end 1) 0)
+			(= (select end 2) 0)
+			(not (= (select m 3) 0))
+		)
+		(and
 			(= (select end 3) 0)
 			(= (store x 4 (select y 3)) x)
 			(= (store y 4 (select m 3)) y)
 			(= (store m 4 (mod (select x 4) (select y 4))) m)
-		) 
-	) 
+		)
+	)
 )
 
 
@@ -124,17 +158,30 @@
 ; Fourth transition
 ; ********************
 
-(assert 
-	(=> 
-		(and (= (select m 4) 0) (= (select end 1) 0) (= (select end 2) 0) (= (select end 3) 0))
-		(and (= res (select y 4)) (= (store end 4 1) end))
+(assert
+	(=>
+		(and
+			(= (select end 1) 0)
+			(= (select end 2) 0)
+			(= (select end 3) 0)
+			(= (select m 4) 0)
+		)
+		(and
+			(= res (select y 4))
+			(= (store end 4 1) end)
+		)
 	)
 )
 
 (assert
 	(=>
-		(or (= (select end 1) 1) (= (select end 2) 1) (= (select end 3) 1) (= (select end 4) 1))
-		(and 
+		(or
+			(= (select end 1) 1)
+			(= (select end 2) 1)
+			(= (select end 3) 1)
+			(= (select end 4) 1)
+		)
+		(and
 			(= (store x 5 0) x)
 			(= (store y 5 0) y)
 			(= (store m 5 0) m)
@@ -144,15 +191,20 @@
 )
 
 (assert
-	(=> 
-		(and (not (= (select m 4) 0)) (= (select end 1) 0) (= (select end 2) 0) (= (select end 3) 0)) 
-		(and 
+	(=>
+		(and
+			(= (select end 1) 0)
+			(= (select end 2) 0)
+			(= (select end 3) 0)
+			(not (= (select m 4) 0))
+		)
+		(and
 			(= (select end 4) 0)
 			(= (store x 5 (select y 4)) x)
 			(= (store y 5 (select m 4)) y)
 			(= (store m 5 (mod (select x 5) (select y 5))) m)
-		) 
-	) 
+		)
+	)
 )
 
 ; ********************
@@ -160,16 +212,31 @@
 ; ********************
 
 (assert
-	(=> 
-		(and (not (= (select m 5) 0)) (= (select end 1) 0) (= (select end 2) 0) (= (select end 3) 0) (= (select end 4) 0)) 
+	(=>
+		(and
+			(not (= (select m 5) 0))
+			(= (select end 1) 0)
+			(= (select end 2) 0)
+			(= (select end 3) 0)
+			(= (select end 4) 0)
+		)
 		false
-	) 
+	)
 )
 
-(assert 
-	(=> 
-		(and (= (select m 5) 0) (= (select end 1) 0) (= (select end 2) 0) (= (select end 3) 0) (= (select end 4) 0))
-		(and (= res (select y 5)) (= (store end 5 1) end))
+(assert
+	(=>
+		(and
+			(= (select end 1) 0)
+			(= (select end 2) 0)
+			(= (select end 3) 0)
+			(= (select end 4) 0)
+			(= (select m 5) 0)
+		)
+		(and
+			(= res (select y 5))
+			(= (store end 5 1) end)
+		)
 	)
 )
 
