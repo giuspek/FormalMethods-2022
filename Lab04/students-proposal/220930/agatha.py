@@ -17,8 +17,8 @@ with Solver() as solver:
     solver.add_assertion(ExactlyOne(Equals(killer, agatha), Equals(killer, butler), Equals(killer, charles)))
 
     # A killer always hates, and is never richer than his victim.
-    solver.add_assertion(Function(hates, [killer, victim]))
-    solver.add_assertion(Not(Function(richer, [killer, victim])))
+    solver.add_assertion(hates(killer, victim))
+    solver.add_assertion(Not(richer(killer, victim)))
 
     # Hidden condition: no one is richer than himself/herself (non-reflexivity)
     for person in [agatha, butler, charles]:
@@ -41,15 +41,15 @@ with Solver() as solver:
 
     # The butler hates everyone not richer than Aunt Agatha.
     for person in [agatha, butler, charles]:
-        solver.add_assertion(Implies(Not(Function(richer, [person, agatha])), Function(hates, [butler, person])))
+        solver.add_assertion(Implies(Not(richer(person, agatha)), hates(butler, person)))
 
     # The butler hates everyone whom Agatha hates.
     for person in [agatha, butler, charles]:
-        solver.add_assertion(Implies(Function(hates, [agatha, person]), Function(hates, [butler, person])))
+        solver.add_assertion(Implies(hates(agatha, person), hates(butler, person)))
 
     # No one hates everyone.
     for i in [agatha, butler, charles]:
-        solver.add_assertion(Not(And(Function(hates, [i, j]) for j in [agatha, butler, charles, killer])))
+        solver.add_assertion(Not(And(hates(i, j) for j in [agatha, butler, charles, killer])))
 
     n_solutions = 0
     while solver.solve():
