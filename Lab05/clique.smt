@@ -1,3 +1,5 @@
+(set-option :produce-models true)
+
 (declare-const n1 Int)
 (declare-const n2 Int)
 (declare-const n3 Int)
