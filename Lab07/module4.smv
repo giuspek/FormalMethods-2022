@@ -1,0 +1,11 @@
+MODULE main
+	VAR
+		b0 : boolean;
+		b1 : boolean;
+		out : 0..2;
+	ASSIGN
+		init(b0) := FALSE;
+		next(b0) := !b0;
+		init(b1) := FALSE;
+		next(b1) := ((!b0 & b1) | (b0 & !b1));
+		out := toint(b0) + 2*toint(b1);

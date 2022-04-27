@@ -1,0 +1,36 @@
+MODULE bit-adder(in1, in2, cin)
+  VAR
+    sum : boolean;
+    cout : boolean;
+
+  ASSIGN
+    next(sum) := (in1 xor in2) xor cin;
+    next(cout) := (in1 & in2) | ((in1 xor in2) & cin);
+
+
+MODULE adder(in1, in2)
+  VAR
+    bit[0] : bit-adder(in1[0], in2[0], FALSE);
+    bit[1] : bit-adder(in1[1], in2[1], bit[0].cout);
+    bit[2] : bit-adder(in1[2], in2[2], bit[1].cout);
+    bit[3] : bit-adder(in1[3], in2[3], bit[2].cout);
+
+  DEFINE
+    sum[0] := bit[0].sum;
+    sum[1] := bit[1].sum;
+    sum[2] := bit[2].sum;
+    sum[3] := bit[3].sum;
+    overflow := bit[3].cout;
+
+
+MODULE main
+  FROZENVAR
+    in1 : array 0..3 of boolean;
+    in2 : array 0..3 of boolean;
+  VAR
+    a : adder(in1, in2);
+
+  DEFINE
+    op1 := toint(in1[0]) + 2 * toint(in1[1]) + 4 * toint(in1[2]) + 8 * toint(in1[3]);
+    op2 := toint(in2[0]) + 2 * toint(in2[1]) + 4 * toint(in2[2]) + 8 * toint(in2[3]);
+    sum := toint(a.sum[0]) + 2 * toint(a.sum[1]) + 4 * toint(a.sum[2]) + 8 * toint(a.sum[3]) + 16 * toint(a.overflow);

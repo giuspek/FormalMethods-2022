@@ -1,0 +1,7 @@
+MODULE main
+	VAR
+		b0 : boolean;
+		b1 : boolean;
+	ASSIGN
+	init(b0) := {FALSE};
+	next(b0) := !b0;
