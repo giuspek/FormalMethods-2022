@@ -41,3 +41,9 @@ For people that asked me some links to easily learn the basics of Python, please
 - Optimization of graph shortest paths
 - MaxSAT/MaxSMT
 - The importance of PseudoBoolean for SMT
+
+## Lab 6
+
+- Multi-objective optimization
+- Minmax/maxmin
+- Simulation of exam exercise: pseudo-Booleans and linear combinations
