@@ -13,8 +13,8 @@ from pysmt.solvers.msat import MathSAT5Solver
 # from pysmt.typing import BV32
 
 a = Symbol("a", BVType(32))
-b = Symbol("a", BVType(32))
-c = Symbol("a", BVType(32))
+b = Symbol("b", BVType(32))
+c = Symbol("c", BVType(32))
 
 bv0 = BVZero(32)
 bv5 = BV(5, 32)
