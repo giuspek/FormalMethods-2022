@@ -1,3 +1,5 @@
+(set-option :produce-models true)
+
 (declare-const n1 Bool)
 (declare-const n2 Bool)
 (declare-const n3 Bool)

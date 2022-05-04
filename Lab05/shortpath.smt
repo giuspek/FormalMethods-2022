@@ -1,3 +1,4 @@
+(set-option :produce-models true)
 (set-option :opt.priority box)
 
 (declare-const A Int)
