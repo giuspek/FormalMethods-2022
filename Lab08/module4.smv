@@ -1,0 +1,21 @@
+MODULE main
+	VAR 
+		b0 : boolean;
+		b1 : boolean;
+		reset : boolean;
+	ASSIGN
+		init(b0) := FALSE;
+		next(b0) := case
+			reset : FALSE;
+			!reset : !b0;
+		esac;
+		init(b1) := FALSE;
+		next(b1) := case
+			reset : FALSE;
+			TRUE : ((!b0 & b1) | (b0 & !b1));
+		esac;
+
+	DEFINE out := toint(b0) + 2*toint(b1);
+
+INVARSPEC out < 2
+
