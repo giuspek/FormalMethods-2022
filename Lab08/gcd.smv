@@ -1,0 +1,37 @@
+MODULE main()
+    VAR  a: 1..100;  b: 1..100; 
+        ia: 1..100;  ib: 1..100; -- initial values of a and b
+         x: 1..100;              -- represents any other divisor
+         pc: {l1,l2,l3,l4,l5};
+    ASSIGN
+        init(ia) := a;
+        init(ib) := b;
+        init(pc):=l1;
+        next(pc):=
+            case
+                pc=l1 & a!=b   : l2;
+                pc=l1 & a=b    : l5;
+                pc=l2 & a>b    : l3;
+                pc=l2 & a<=b   : l4;
+                pc=l3 | pc=l4  : l1;
+                pc=l5          : l5;
+            esac;
+        next(a):=
+            case
+                pc=l3 & a > b: a - b;
+                TRUE: a;
+            esac;
+        next(b):=
+            case
+                pc=l4 & b > a: b - a;
+                TRUE: b;
+            esac;
+        next(ia) := ia;
+        next(ib) := ib;
+    
+LTLSPEC F (pc = l5);    -- eventually we exit the while loop
+
+INVARSPEC (pc = l5) -> (
+    (a = b) & (ia mod a = 0) & (ib mod a = 0) &     -- a is a common divisor
+    ((ia mod x = 0) & (ib mod x = 0) -> (x <= a))); -- for every other c.d. x, 
+                                                    -- x <= a (a is the gcd)

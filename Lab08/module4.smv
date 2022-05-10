@@ -17,5 +17,12 @@ MODULE main
 
 	DEFINE out := toint(b0) + 2*toint(b1);
 
+	JUSTICE out = 3
+
 INVARSPEC out < 2
 
+LTLSPEC F out = 3
+
+LTLSPEC (out = 0) U (!reset)
+
+LTLSPEC G (out = 2 -> F out = 3)

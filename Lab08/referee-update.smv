@@ -1,0 +1,52 @@
+MODULE User(auth) 
+
+  VAR 
+    status: { NonCritical, Trying, Critical };
+    req: boolean;
+  ASSIGN
+    init(status) := NonCritical;  
+
+    next(status) := 
+      case 
+        status = NonCritical : { NonCritical, Trying };
+	      status = Trying      : 
+            case 
+              next(auth) = FALSE : Trying;
+              next(auth) = TRUE: Critical;
+            esac;
+        status = Critical    : { Critical, NonCritical};
+      esac;
+
+    req := status in { Trying, Critical };
+
+    FAIRNESS
+      status != Critical
+
+  
+MODULE Arbiter(req0, req1)
+  VAR 
+    auth0: boolean;
+    auth1: boolean;
+    turn: {0,1};
+
+  ASSIGN 
+    init(auth0) := FALSE;
+    next(auth0) := req0 & turn = 0;
+    init(auth1) := FALSE;
+    next(auth1) := req1 & turn = 1;
+    next(turn)  := case 
+        next(auth0) : 0;
+        next(auth1) : 1;
+        TRUE : (turn+1) mod 2;
+    esac;
+
+
+MODULE main
+  VAR 
+    U0: User(Ar.auth0);  --- User 0
+    U1: User(Ar.auth1);  --- User 1
+
+    Ar: Arbiter(U0.req, U1.req);
+
+LTLSPEC G (!(U0.status = Critical & U1.status = Critical))
+LTLSPEC G (U0.status = Trying -> F (U0.status = Critical))   
