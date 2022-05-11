@@ -47,3 +47,14 @@ For people that asked me some links to easily learn the basics of Python, please
 - Multi-objective optimization
 - Minmax/maxmin
 - Simulation of exam exercise: pseudo-Booleans and linear combinations
+
+## Lab7
+
+- Introduction to nuXmv
+- nuXmv: the adder circuit
+
+## Lab8
+
+- Encode programs using nuXmv
+- Checking mutual exclusion using nuXmv
+- Chemical reactions using nuXmv
