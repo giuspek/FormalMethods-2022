@@ -1,6 +1,6 @@
 -- Hanoi problem with three poles (left, middle, right)
 -- and four ordered disks d1, d2, d3, d4,
--- disk d1 is the biggest one
+-- disk d1 is the smallest one
 
 MODULE main
 VAR

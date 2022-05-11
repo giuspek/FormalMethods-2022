@@ -1,0 +1,92 @@
+-- A simple planning problem. Move the blocks from the initial configuration
+-- (on the left) to the final one (on the right):
+--
+--    +---+        +---+
+--    | A |        | C |
+--    +---+        +---+
+--    | B |  --->  | B |
+--    +---+        +---+
+--    | C |        | A |
+-- ___|___|________|___|___
+-- :::::::::: T :::::::::::
+--
+
+MODULE block(id, ab, bl)
+VAR
+  above : {none, a, b, c}; -- the block above this one
+  below : {none, a, b, c}; -- the block below this one
+DEFINE
+  clear := above = none;
+INIT
+  above = ab & below = bl
+INVAR
+  below != id & above != id -- a block can't be above or below itself
+
+
+MODULE main
+VAR
+  move : {move_a, move_b, move_c}; -- at each step only one block moves
+  block_a : block(a, none, b);
+  block_b : block(b, a, c);
+  block_c : block(c, b, none);
+
+TRANS -- if a block moves, then it will still be clear and its location will
+      -- change
+  (move = move_a -> next(block_a.clear) &
+                    next(block_a.below) != block_a.below) &
+  (move = move_b -> next(block_b.clear) &
+                    next(block_b.below) != block_b.below) &
+  (move = move_c -> next(block_c.clear) & next(block_c.below) != block_c.below)
+
+TRANS -- if a block doesn't move, its location doesn't change
+  (move != move_a ->
+                    next(block_a.below) = block_a.below) &
+  (move != move_b ->
+                    next(block_b.below) = block_b.below) &
+  (move != move_c -> next(block_c.below) = block_c.below)
+  
+TRANS -- the same as the previous, but from the point of view of the other
+      -- blocks
+  (move != move_a & block_b.above = a -> next(block_b.above) = a) &
+  (move != move_a & block_c.above = a -> next(block_c.above) = a) &
+  (move != move_b & block_a.above = b -> next(block_a.above) = b) &
+  (move != move_b & block_c.above = b -> next(block_c.above) = b) &
+  (move != move_c & block_a.above = c -> next(block_a.above) = c) &
+  (move != move_c & block_b.above = c -> next(block_b.above) = c)
+INVAR -- invariants defining relations among the three blocks: if A is under
+      -- B, then B is over A etc.
+  (block_a.above = b <-> block_b.below = a) &
+  (block_a.above = c <-> block_c.below = a) &
+  (block_b.above = a <-> block_a.below = b) &
+  (block_b.above = c <-> block_c.below = b) &
+  (block_c.above = a <-> block_a.below = c) &
+  (block_c.above = b <-> block_b.below = c) &
+
+  (block_a.above = none -> (block_b.below != a & block_c.below != a)) &
+  (block_b.above = none -> (block_a.below != b & block_c.below != b)) &
+  (block_c.above = none -> (block_a.below != c & block_b.below != c)) &
+
+  (block_a.below = none -> (block_b.above != a & block_c.above != a)) &
+  (block_b.below = none -> (block_a.above != b & block_c.above != b)) &
+  (block_c.below = none -> (block_a.above != c & block_b.above != c))
+
+  
+TRANS -- a block can not move if it has some some block above itself
+  (!next(block_a.clear) -> next(move) != move_a) &
+  (!next(block_b.clear) -> next(move) != move_b) &
+  (!next(block_c.clear) -> next(move) != move_c)
+
+LTLSPEC -- look for a way to reach the final configuration
+  ! F(block_a.below = none & block_a.above = b &
+      block_b.below = a & block_b.above = c &
+      block_c.below = b & block_c.above = none)
+
+LTLSPEC -- look for a way to reach a configuration in which all the blocks are on
+     -- the table
+  ! F(block_a.below = none & block_b.below = none & block_c.below = none)
+
+INVARSPEC -- at least one block must be on the table
+  block_a.below = none | block_b.below = none | block_c.below = none
+
+INVARSPEC -- at least one block must be clear
+  block_a.above = none | block_b.above = none | block_c.above = none

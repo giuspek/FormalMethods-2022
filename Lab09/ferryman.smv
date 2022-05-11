@@ -1,0 +1,84 @@
+MODULE main
+VAR
+-- the man and the three items
+  cabbage : {right,left};
+  sheep   : {right,left};
+  wolf    : {right,left};
+  man     : {right,left};
+-- possible moves
+  move    : {c, s, w, e};
+
+DEFINE
+  carry_cabbage := move=c;
+  carry_sheep := move=s;
+  carry_wolf := move=w;
+  no_carry := move=e;
+
+-- initially everything is on the right bank
+ASSIGN
+  init(cabbage) := right;
+  init(sheep)    := left;
+  init(wolf)    := right;
+  init(man)     := left;
+  init(move)    := case
+    man != wolf & man != sheep & man != cabbage: {e};
+    man != wolf & man != sheep: {e, c};
+    man != wolf & man != cabbage: {e, s};
+    man != cabbage & man != sheep: {e, w};
+    man != wolf : {e,c,s};
+    man != sheep : {e,c,w};
+    man != cabbage : {e,w,s};
+    TRUE: {e,c,s,w};
+  esac;
+
+TRANS
+  next(man) != next(cabbage) -> next(move) != c
+
+TRANS
+  next(man) != next(sheep) -> next(move) != s
+
+TRANS
+  next(man) != next(wolf) -> next(move) != w
+
+TRANS
+  carry_cabbage ->
+		next(cabbage)!=cabbage &
+		next(man)!=man &
+		next(sheep)=sheep &
+		next(wolf)=wolf
+
+TRANS
+  carry_sheep -> 
+		next(sheep)!=sheep &
+		next(man)!=man &
+		next(cabbage)=cabbage &
+		next(wolf)=wolf
+
+
+TRANS
+  carry_wolf -> 
+		next(wolf)!=wolf &
+		next(man)!=man &
+		next(sheep)=sheep &
+		next(cabbage)=cabbage
+
+TRANS
+  no_carry ->
+	next(man)!=man &
+	next(sheep)=sheep &
+	next(cabbage)=cabbage &
+	next(wolf)=wolf
+
+INVAR
+  (wolf = sheep | sheep = cabbage) -> (sheep = man)
+
+-- sheep and wolf must not be left unattended !
+-- sheep and cabbage must not be left unattended !
+DEFINE
+  goal := cabbage = left & sheep = left & wolf = left;
+
+-- spec to find a solution to the problem
+
+LTLSPEC
+  !F goal
+
