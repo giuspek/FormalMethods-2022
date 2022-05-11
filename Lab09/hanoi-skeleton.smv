@@ -1,0 +1,27 @@
+-- Hanoi problem with three poles (left, middle, right)
+-- and four ordered disks d1, d2, d3, d4,
+-- disk d1 is the biggest one
+
+MODULE main
+VAR
+  d1 : {left,middle,right}; -- smallest
+  d2 : {left,middle,right};
+  d3 : {left,middle,right};
+  d4 : {left,middle,right}; -- largest
+  move : 1..4; -- possible moves
+
+DEFINE
+  move_d1 := move=1;
+  move_d2 := move=2;
+  move_d3 := move=3;
+  move_d4 := move=4;
+
+  -- di is clear iff it can move to a different 
+  clear_d1 := TRUE;
+  
+  clear_d2 := d2!=d1;
+  clear_d3 := d3!=d1 & d3!=d2;
+  clear_d4 := d4!=d1 & d4!=d2 & d4!=d3;
+
+ -- TODO
+

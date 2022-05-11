@@ -1,0 +1,18 @@
+MODULE main
+VAR
+-- the man and the three items
+  cabbage : {right,left};
+  sheep   : {right,left};
+  wolf    : {right,left};
+  man     : {right,left};
+-- possible moves
+  move    : {c, s, w, e};
+
+DEFINE
+  carry_cabbage := move=c;
+  carry_sheep := move=s;
+  carry_wolf := move=w;
+  no_carry := move=e;
+
+-- TODO
+
