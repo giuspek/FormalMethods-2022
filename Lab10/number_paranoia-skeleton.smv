@@ -1,0 +1,10 @@
+-- Numbers Paranoia Lite
+
+MODULE main
+VAR
+  table : array 0..11 of {1, 2, 3, 4, 0};
+  
+  -- TODO
+
+ASSIGN
+  -- TODO

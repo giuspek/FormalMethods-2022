@@ -1,0 +1,15 @@
+MODULE main
+	VAR
+		b0 : boolean;
+		b1 : boolean;
+		b2 : boolean;
+	ASSIGN
+		init(b0) := FALSE;
+		init(b1) := FALSE;
+		init(b2) := FALSE;
+
+		next(b0) := !b0;
+		next(b1) := (!b0 & b1) | (b0 & !b1);
+		next(b2) := ((b0 & b1) & !b2) | (!(b0 & b1) & b2);
+	DEFINE
+		out := toint(b0) + 2*toint(b1) + 4*toint(b2);
