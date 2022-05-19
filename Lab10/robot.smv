@@ -1,0 +1,63 @@
+MODULE main()
+VAR
+    x       : 0..9;
+    y       : 0..9;
+    state   : { MOVE, CHECK, CHARGE, CLEAN, OFF };
+    budget  : 0..100;
+    cleaned : boolean; -- support variable
+    prev    : 0..99;   -- support variable
+DEFINE
+    pos := y * 10 + x;
+INIT
+    x = 0 & y = 0 & state = CHECK & budget = 0 & cleaned = FALSE & prev = 1;
+ASSIGN
+    next(state) := case
+        next(pos) = 0 & next(budget) < 100         : CHARGE;
+        next(budget) = 0                     : OFF;
+        state = CHARGE | state = MOVE  : CHECK;
+        state = CHECK                  : { CLEAN, MOVE };
+        TRUE                           : MOVE;
+    esac;
+    next(budget) := case
+        (state = MOVE | state = CLEAN)
+                            & budget > 0 : budget - 1;
+        state = CHARGE                   : 100;
+        TRUE                             : budget;
+    esac;
+    next(cleaned) := case
+        state = MOVE  : FALSE;
+        state = CLEAN : TRUE;
+        TRUE          : cleaned;
+    esac;
+    next(prev) := pos;
+
+    FAIRNESS pos != 0
+
+TRANS
+    state != MOVE -> (x = next(x) & y = next(y));
+TRANS
+    state = MOVE -> (next(x) = x + 1 |
+                     next(x) = x - 1 |
+                     next(y) = y + 1 |
+                     next(y) = y - 1);
+TRANS
+    next(x) != x -> next(y) = y;
+TRANS
+    next(y) != y -> next(x) = x;
+
+
+
+    
+-- in all possible executions, the robot changes position infinitely many times
+LTLSPEC G F state = MOVE;
+-- it is never the case that the robot's action is either MOVE or CLEAN
+-- and the available budget is zero
+INVARSPEC (state = MOVE | state = CLEAN) -> budget > 0;
+-- if the robot charges infinitely often, then
+-- it changes position infinitely many times
+LTLSPEC G F (state = CHARGE) -> G F (state = MOVE);
+-- if the robot is in position 0, then it is necessarily always the case that
+-- in the future it occupies a different position
+LTLSPEC G (state = CHARGE -> G F pos != 0);
+-- the robot does not move along the diagonal
+INVARSPEC x = next(x) | y = next(y);
