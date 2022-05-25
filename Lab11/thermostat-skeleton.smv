@@ -1,0 +1,10 @@
+@TIME_DOMAIN continuous
+MODULE main
+  DEFINE threshold := 18;
+  FROZENVAR max_dt : real;
+  VAR
+    temperature : real;
+    dt : clock;
+    state : {on, off};
+
+  -- TODO
