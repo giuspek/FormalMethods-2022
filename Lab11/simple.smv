@@ -1,0 +1,18 @@
+@TIME_DOMAIN continuous
+
+MODULE main
+VAR
+  loc : {l0, l1};
+  c : clock;
+
+  INIT loc = l0 & c = 0;
+
+  INVAR loc = l0 -> c <= 5;
+  INVAR loc = l1 -> c < 15;
+
+  TRANS loc = l0 -> (c >= 5 & next(loc) = l1 & next(c) = 0);
+  TRANS loc = l1 -> (c > 3 & next(loc) = l0 & next(c) = c);
+
+LTLSPEC G (loc = l0 -> (F[0, 5] loc = l1));
+LTLSPEC G (loc = l1 -> (G[0, 3] loc = l1));
+LTLSPEC G ((loc = l1 & c = 0) -> (G[0, 3] loc = l1));

@@ -1,0 +1,68 @@
+@TIME_DOMAIN continuous
+MODULE main
+  FROZENVAR
+      k : real;
+      k1 : real;
+      k2 : real;
+
+  INVAR k >= 0;
+  INVAR k1 >= k;
+  INVAR k2 > k;
+
+  VAR
+    b : boolean;
+
+
+
+
+LTLSPEC (Y~ TRUE);
+LTLSPEC (!X b) -> (X !b);
+LTLSPEC (!X~ b) -> (X~ !b);
+
+
+------ time_since / time_until
+
+LTLSPEC NAME TS_0 := G (b -> time_since(b) = 0);
+LTLSPEC NAME TS_1 := G ((Y b) -> time_since(b) > 0);
+LTLSPEC NAME TS_2 := G ((Y~ b) -> time_since(b) > 0);
+LTLSPEC NAME TS_3 := F (time_since(b) < 0);
+
+LTLSPEC NAME TU_0 := G (b -> time_until(b) = 0);
+LTLSPEC NAME TU_1 := G ((X b) -> time_until(b) > 0);
+LTLSPEC NAME TU_2 := G ((X~ b) -> time_until(b) > 0);
+LTLSPEC NAME TU_3 := F (time_until(b) < 0);
+
+
+------ FUTURE operators
+
+LTLSPEC NAME F_0 := G ((F[0, 0] b) -> (b | X b));
+LTLSPEC NAME F_1 := G ((F[0, k] b) -> (F[0, 0] b));
+LTLSPEC NAME F_2 := G ((F[0, +oo) b) -> (F[0, 0] b));
+LTLSPEC NAME F_3 := G ((F[0, k1] b) -> (F[0, k] b));
+LTLSPEC NAME F_4 := G ((F[0, +oo) b) -> (F[0, k] b));
+LTLSPEC NAME F_5 := G ((F[k, +oo) b) -> (F[k1, +oo) b));
+
+LTLSPEC NAME G_0 := G ((G[0, k] b) -> (G[0, k1] b));
+LTLSPEC NAME G_1 := G ((G[0, k] b) -> (G[0, +oo) b));
+LTLSPEC NAME G_2 := G ((G[k1, +oo) b) -> (G[k, +oo) b));
+
+
+------ PAST operators
+
+LTLSPEC NAME O_0 := G ((O[0, 0] b) -> (b | Y b));
+LTLSPEC NAME O_1 := G ((O[0, k] b) -> (O[0, 0] b));
+LTLSPEC NAME O_2 := G ((O[0, +oo) b) -> (O[0, 0] b));
+LTLSPEC NAME O_3 := G ((O[0, k1] b) -> (O[0, k] b));
+LTLSPEC NAME O_4 := G ((O[0, +oo) b) -> (O[0, k] b));
+LTLSPEC NAME O_5 := G ((O[k, +oo) b) -> (O[k1, +oo) b));
+LTLSPEC NAME O_6 := G ((O[0,0] b) -> !(O[0,0] !b));
+
+LTLSPEC NAME H_0 := G ((H[0, k] b) -> (H[0, k1] b));
+LTLSPEC NAME H_1 := G ((H[0, k] b) -> (H[0, +oo) b));
+LTLSPEC NAME H_2 := G ((H[k1, +oo) b) -> (H[k, +oo) b));
+
+
+------ MIXED operators
+LTLSPEC NAME M_1 := (G[k2, +oo) b) -> (F[0, k] G b);
+LTLSPEC NAME M_2 := (time_until(!(H[0, k] b)) > k) -> ((G[0, k] b) & F !b);
+LTLSPEC NAME M_3 := ((G[0, 9] b) & (F[0,10] b)) -> (G[0, 10] (F b));

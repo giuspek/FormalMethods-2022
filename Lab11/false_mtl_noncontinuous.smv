@@ -1,0 +1,71 @@
+@TIME_DOMAIN continuous
+MODULE main
+VAR
+  a : boolean noncontinuous;
+  b : boolean noncontinuous;
+  c : boolean noncontinuous;
+  x : real noncontinuous;
+  y : real noncontinuous;
+FROZENVAR
+  p : real;
+  q : real;
+
+LTLSPEC (!X b) -> (X !b);
+LTLSPEC (!X~ b) -> (X~ !b);
+
+LTLSPEC F [0,+oo) (b);
+LTLSPEC F [0,4] (b);
+LTLSPEC G ( ((F b) & (x @F~ b) = 0) -> X TRUE);
+LTLSPEC G ( ((F b) & (time @F~ b) = 0) -> X TRUE)
+LTLSPEC G ( ((!b & F b) & (time @F~ b) = 0) -> X TRUE)
+LTLSPEC G ( !((F b) & ((x @F~ b) = 0)))
+LTLSPEC G ( !((F b)))
+LTLSPEC !((F b) & ((x @F~ b) = 0))
+LTLSPEC ! F (b & time = 10)
+LTLSPEC ! (G ( x = (y @O~ b)) & G F (b & y=1) & G F (! b & y=0) & G F y!=x);
+LTLSPEC F b -> (!b U b)
+LTLSPEC G (a -> (F c & (c | (time @F~ c) <= 2 * p)))
+LTLSPEC X~ ((b | a) -> (F c))
+LTLSPEC F [3,+oo) (b)
+LTLSPEC ! ( G [0,3] (((time @O~ b)) <= 0))
+LTLSPEC ( (F [0,0] b))
+LTLSPEC ( (O [0,0] b))
+LTLSPEC ! ( G [0,3] (F [0,1] b))
+LTLSPEC ! ( G [0,3] (O [0,0] b))
+LTLSPEC ! ( G [0,3] (Y TRUE S F b))
+LTLSPEC ! ( G [0,3] (O [0,0] F b))
+LTLSPEC ! ( G [0,3] (Y TRUE S F b) & F !b)
+LTLSPEC ! F [3,+oo) (b)
+LTLSPEC time_until(b) = 1
+LTLSPEC (time_until(time_until(b) = 1)) = 2
+LTLSPEC !(F [2,+oo) b & time_until(time_until(b) = 1) = 1 & (time @F~ b) = 2)
+LTLSPEC ! (b & (time_until(b) = 1 & X~ (!b & !b U  b)))
+LTLSPEC ! (b & time_until(b) = 1 & X~ (!b & !b U  (b & time_until(b) = 1 & X~ (!b & !b U  b))))
+LTLSPEC G (((time_until(b) = p & time_until(time_until(b) = p) = q)) -> (time_until(b) = p + q | time_until(b) < p))
+
+-- infinite traces: diverging symbols.
+LTLSPEC ! (G F b & G (b -> (time_until(b) = 1 & X~ (!b & !b U  b))))
+LTLSPEC ! (b & G (b -> (time_until(b) = 1 & X~ (!b & !b U  b))))
+LTLSPEC ! (G F b & G (b -> (time_until(b) = 1)))
+LTLSPEC ! (b & G (b -> (time_until(b) = 1 & X~ (!b & !b U  b))))
+LTLSPEC ! ( G (O [0,0] b))
+
+ -- dense vs super-dense
+LTLSPEC G ((F[0,0] b) -> b); -- true in dense time.
+LTLSPEC G ((O[0,0] b) -> b); -- true in dense time.
+LTLSPEC G (b -> G[0,0] b); -- true in dense time.
+LTLSPEC G (b -> H[0,0] b); -- true in dense time.
+
+
+
+LTLSPEC G ((F[0,0] !b) -> !F[0,0] b); -- true in dense time.
+LTLSPEC G ((O[0,0] !b) -> !O[0,0] b); -- true in dense time.
+
+LTLSPEC G ((O[0,0] b) -> (F[0,0] b)); -- true in dense time.
+LTLSPEC G ((F[0,0] b) -> (O[0,0] b)); -- true in dense time.
+
+LTLSPEC G ((H[0,0] b) -> (G[0,0] b)); -- true in dense time.
+LTLSPEC G ((G[0,0] b) -> (H[0,0] b)); -- true in dense time.
+
+LTLSPEC ((G F b) -> G (time_until(b) > 0)); -- false also in dense time
+LTLSPEC (G X~ TRUE) -> ((G F b) -> G (time_until(b) > 0));

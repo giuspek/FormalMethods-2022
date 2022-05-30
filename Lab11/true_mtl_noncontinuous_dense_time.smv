@@ -1,0 +1,17 @@
+@TIME_DOMAIN continuous
+MODULE main
+VAR
+  a : boolean noncontinuous;
+  b : boolean noncontinuous;
+
+-- dense time : no discrete transitions (G X~ TRUE).
+LTLSPEC (G X~ TRUE) -> G (!X TRUE);
+LTLSPEC (G X~ TRUE) -> G (b <-> F[0,0] b); -- false in super-dense time.
+LTLSPEC (G X~ TRUE) -> G (b <-> O[0,0] b); -- false in super-dense time.
+LTLSPEC (G X~ TRUE) -> G (b <-> G[0,0] b); -- false in super-dense time.
+LTLSPEC (G X~ TRUE) -> G (b <-> H[0,0] b); -- false in super-dense time.
+
+LTLSPEC (G X~ TRUE) -> G ((F[0,0] !b) <-> !F[0,0] b); -- false in super-dense time.
+LTLSPEC (G X~ TRUE) -> G ((O[0,0] !b) <-> !O[0,0] b); -- false in super-dense time.
+LTLSPEC (G X~ TRUE) -> G ((O[0,0] b) <-> (F[0,0] b)); -- false in super-dense time.
+LTLSPEC (G X~ TRUE) -> G ((H[0,0] b) <-> (G[0,0] b)); -- false in super-dense time.

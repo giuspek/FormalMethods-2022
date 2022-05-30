@@ -1,0 +1,76 @@
+@TIME_DOMAIN continuous
+MODULE main
+FROZENVAR
+  k : real;
+  k1 : real;
+  k2 : real;
+
+INVAR k >= 0;
+INVAR k1 >= k;
+INVAR k2 > k;
+
+VAR
+  b : boolean;
+  a : boolean;
+
+
+------ NEXT / PREV
+
+LTLSPEC !(Y~ TRUE);
+LTLSPEC G ((X TRUE) | (X~ TRUE));
+LTLSPEC G ((!X TRUE) | (!X~ TRUE));
+LTLSPEC G((b & X~ TRUE) -> X~ (Y~ b));
+LTLSPEC (G X~ TRUE) -> ((G b) | (G !b));
+LTLSPEC (X !b) -> (!X b);
+LTLSPEC (X~ !b) -> (!X~ b);
+
+
+------ FUTURE operators
+
+LTLSPEC NAME F_0 := G ((b | X b) -> (F[0, 0] b));
+LTLSPEC NAME F_1 := G ((F[0, 0] b) -> (F[0, k] b));
+LTLSPEC NAME F_2 := G ((F[0, 0] b) -> (F[0, +oo) b));
+LTLSPEC NAME F_3 := G ((F[0, k] b) -> (F[0, k1] b));
+LTLSPEC NAME F_4 := G ((F[0, k] b) -> (F[0, +oo) b));
+LTLSPEC NAME F_5 := G ((F[k1, +oo) b) -> (F[k, +oo) b));
+LTLSPEC NAME F_6 := G ((F b) -> (F[0, +oo) b));
+LTLSPEC NAME F_7 := G ((F[0, +oo) b) -> (F b));
+LTLSPEC NAME F_8 := G ((F[0, +oo) b) -> (F[0, k] b | F[k, +oo) b));
+LTLSPEC NAME F_9 := G ((F[0, k] b | F[k, +oo) b) -> (F[0, +oo) b));
+
+LTLSPEC NAME G_0 := G ((G[0, k1] b) -> (G[0, k] b));
+LTLSPEC NAME G_1 := G ((G[0, +oo) b) -> (G[0, k] b));
+LTLSPEC NAME G_2 := G ((G[k, +oo) b) -> (G[k1, +oo) b));
+LTLSPEC NAME G_3 := G ((G b) -> (G[0, +oo) b));
+LTLSPEC NAME G_4 := G ((G[0, +oo) b) -> (G b));
+LTLSPEC NAME G_5 := G ((G[0, k] b) & (G [k, +oo) b) -> (G[0, +oo) b));
+LTLSPEC NAME G_6 := G ((G[0, +oo) b) -> (G[0, k] b) & (G [k, +oo) b));
+LTLSPEC NAME G_7 := G (((G[0, k] b) & (G[k, +oo) !b)) -> FALSE);
+
+------ PAST operators
+
+LTLSPEC NAME O_0 := G ((b | Y b) -> (O[0, 0] b));
+LTLSPEC NAME O_1 := G ((O[0, 0] b) -> (O[0, k] b));
+LTLSPEC NAME O_2 := G ((O[0, 0] b) -> (O[0, +oo) b));
+LTLSPEC NAME O_3 := G ((O[0, k] b) -> (O[0, k1] b));
+LTLSPEC NAME O_4 := G ((O[0, k] b) -> (O[0, +oo) b));
+LTLSPEC NAME O_5 := G ((O[k1, +oo) b) -> (O[k, +oo) b));
+LTLSPEC NAME O_6 := G ((O b) -> (O[0, +oo) b));
+LTLSPEC NAME O_7 := G ((O[0, +oo) b) -> (O[0, k] b | O[k, +oo) b));
+LTLSPEC NAME O_8 := G ((O[0, k] b | O[k, +oo) b) -> (O[0, +oo) b));
+
+LTLSPEC NAME H_0 := G ((H[0, k1] b) -> (H[0, k] b));
+LTLSPEC NAME H_1 := G ((H[0, +oo) b) -> (H[0, k] b));
+LTLSPEC NAME H_2 := G ((H[k, +oo) b) -> (H[k1, +oo) b));
+LTLSPEC NAME H_3 := G ((H b) -> (H[0, +oo) b));
+LTLSPEC NAME H_4 := G ((H[0, +oo) b) -> (H b));
+LTLSPEC NAME H_5 := G ((H[0, k] b) & (H [k, +oo) b) -> (H[0, +oo) b));
+LTLSPEC NAME H_6 := G ((H[0, +oo) b) -> (H[0, k] b) & (H [k, +oo) b));
+
+------ MIXED operators
+
+LTLSPEC NAME M_0 := (F b) <-> (F O[0, +oo) b);
+LTLSPEC NAME M_1 := (F[0, k] (G b)) -> (G[k2, +oo) b);
+LTLSPEC NAME M_2 := ((G[0, k] b) & F !b) -> (time_until(!(H[0, k] b)) > k);
+LTLSPEC NAME M_3 := G (!(F[0,0] O !b) <-> (G[0,0] H b));
+LTLSPEC NAME M_4 := (F[0, 100] F[0, 50] G[0, 20] (a | b)) -> F[0, 270] (a | b);

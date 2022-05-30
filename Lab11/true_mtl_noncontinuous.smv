@@ -1,0 +1,59 @@
+@TIME_DOMAIN continuous
+MODULE main
+VAR
+  a : boolean noncontinuous;
+  b : boolean noncontinuous;
+  c : boolean noncontinuous;
+  x : real noncontinuous;
+  y : real noncontinuous;
+FROZENVAR
+  p : real;
+  q : real;
+
+  -- simple equivalences of [0, +oo) bound.
+LTLSPEC G ((a U[0, +oo) b) <-> (a U b));
+LTLSPEC G ((F[0, +oo) a) <-> (F a));
+LTLSPEC G ((G[0, +oo) a) <-> (G a));
+LTLSPEC G ((a S[0, +oo) b) <-> (a S b));
+LTLSPEC G ((O[0, +oo) a) <-> (O a));
+LTLSPEC G ((H[0, +oo) a) <-> (H a));
+
+-- simple LTL rewritings
+LTLSPEC G ((TRUE U[0, q] a) <-> (F[0, q] a));
+LTLSPEC G (!(TRUE U[0, q] !a) <-> (G[0, q] a));
+LTLSPEC G ((TRUE U[p, +oo) a) <-> (F[p, +oo) a));
+LTLSPEC G (!(TRUE U[p, +oo) !a) <-> (G[p, +oo) a));
+LTLSPEC G ((TRUE S[0, q] a) <-> (O[0, q] a));
+LTLSPEC G (!(TRUE S[0, q] !a) <-> (H[0, q] a));
+LTLSPEC G ((TRUE S[p, +oo) a) <-> (O[p, +oo) a));
+LTLSPEC G (!(TRUE S[p, +oo) !a) <-> (H[p, +oo) a));
+LTLSPEC G ((a U[0, q] b) <-> !(!a V[0, q] !b));
+LTLSPEC G ((a S[0, q] b) <-> !(!a T[0, q] !b));
+-- these 2 properties take a lot of time.
+LTLSPEC G ((a U[q, +oo) b) <-> !(!a V[q, +oo) !b));
+LTLSPEC G ((a S[q, +oo) b) <-> !(!a T[q, +oo) !b));
+
+LTLSPEC (a U[0, p] b) -> (a U b); -- issue #688
+LTLSPEC G ((a U b) & (F[0, p] b)) -> (a U[0, p] b);
+LTLSPEC G (b -> F[0,0] b);
+LTLSPEC G (b -> O[0,0] b);
+LTLSPEC G ((G[0,0] b) ->b);
+LTLSPEC G ((H[0,0] b) -> b);
+LTLSPEC ((!b & ! b U b) & (time @F~ b) = 0) -> X TRUE
+LTLSPEC G ( ((X b) -> (x @F~ b) = next(x)))
+LTLSPEC G ( ((X TRUE) -> (x at next TRUE) = next(x)))
+LTLSPEC ((G (a -> F b)) & (G (b -> F [0,1] c))) -> G (a -> F c)
+LTLSPEC ((F b) & (G (b -> F [0,1] c))) -> (F c)
+LTLSPEC ((F b) & (G (b -> F c))) -> (F c)
+LTLSPEC (F [0,1] c) -> (F c)
+LTLSPEC (!b U b) -> F b
+LTLSPEC F b -> (!b U (b | X~b))
+LTLSPEC (X~ (!b & F b)) -> (time @F~ b) != 0
+LTLSPEC G ((time_until(b) = p & time_until(time_until(b) = p) = q) -> (time_until(b) = p + q | time_until(b) <= p))
+LTLSPEC G ( (F [0,0] b) <-> (X TRUE U b) )
+LTLSPEC G (O [0,0] b <-> (Y TRUE S b))
+LTLSPEC G ((O [0,0] F b) <-> (Y TRUE S F b))
+
+LTLSPEC G ((!F[0,0] b) -> F[0,0] !b);
+LTLSPEC G ((!O[0,0] b) -> O[0,0] !b);
+LTLSPEC (((G F b) & time_until(b) = p) -> !(G[p, +oo) !b));

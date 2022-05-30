@@ -1,0 +1,44 @@
+@TIME_DOMAIN continuous
+
+MODULE main
+  DEFINE threshold := 18;
+  FROZENVAR max_dt : real;
+  VAR
+    temperature : real;
+    dt : clock;
+    state : {on, off};
+
+  INIT temperature >= threshold - max_dt;
+  INIT temperature <= threshold + max_dt;
+  INIT temperature < threshold -> state = on;
+  INIT temperature > threshold -> state = off;
+  INIT dt = 0;
+
+  -- real-time thermostat: takes at most max_dt to check temperature.
+  INVAR dt < max_dt;
+
+  ASSIGN
+    -- at every discrete transition put dt to 0
+    next(dt) := 0;
+    -- update temperature based on current mode.
+    next(temperature) :=
+      case
+        state = on : temperature + dt;
+        TRUE : temperature - dt;
+      esac;
+    -- switch mode depending on value of temperature,
+    -- in the same discrete step we update the temperature and
+    -- change the mode.
+    next(state) :=
+      case
+        state = off & next(temperature) < threshold : on;
+        state = on & next(temperature) > threshold : off;
+        TRUE : state;
+      esac;
+
+INVARSPEC temperature >= threshold - max_dt;
+INVARSPEC temperature <= threshold + max_dt;
+
+-- same thing using LTL.
+LTLSPEC G (temperature >= threshold - 2 * max_dt);
+LTLSPEC G (temperature <= threshold + 2 * max_dt);

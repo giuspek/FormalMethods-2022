@@ -1,0 +1,15 @@
+@TIME_DOMAIN continuous
+MODULE main
+VAR
+  b : boolean;
+  a : boolean;
+
+  ------ time_since / time_until
+
+LTLSPEC NAME TS_0 := (b) -> ((X G (time_since(b) >= 0)) | (X~ G (time_since(b) >= 0)));
+LTLSPEC NAME TS_1 := G ((Y b) -> time_since(b) = 0);
+LTLSPEC NAME TS_2 := G ((Y~ b) -> time_since(b) = 0);
+
+LTLSPEC NAME TU_0 := (G F b) -> G (time_until(b) >= 0);
+LTLSPEC NAME TU_1 := G ((X b) -> time_until(b) = 0);
+LTLSPEC NAME TU_2 := G ((X~ b) -> time_until(b) = 0);
