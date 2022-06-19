@@ -1,0 +1,8 @@
+(set-logic QF_NIA)
+(declare-fun a () Int)
+(declare-fun b () Int)
+(declare-fun c () Int)
+(declare-fun d () Int)
+(declare-fun e () Int)
+(assert (let ((.def_0 (<= a b))) (let ((.def_1 (ite .def_0 b a))) (let ((.def_2 (<= c d))) (let ((.def_3 (ite .def_2 d c))) (let ((.def_4 (<= .def_1 .def_3))) (let ((.def_5 (ite .def_4 .def_3 .def_1))) (let ((.def_6 (= e .def_5))) (let ((.def_7 (* a b))) (let ((.def_8 (= .def_7 c))) (let ((.def_9 (- c b))) (let ((.def_10 (= .def_9 b))) (let ((.def_11 (* a 4))) (let ((.def_12 (= .def_11 d))) (let ((.def_13 (+ a c))) (let ((.def_14 (= .def_13 d))) (let ((.def_15 (= c d))) (let ((.def_16 (not .def_15))) (let ((.def_17 (= b d))) (let ((.def_18 (not .def_17))) (let ((.def_19 (= b c))) (let ((.def_20 (not .def_19))) (let ((.def_21 (= a d))) (let ((.def_22 (not .def_21))) (let ((.def_23 (= a c))) (let ((.def_24 (not .def_23))) (let ((.def_25 (= a b))) (let ((.def_26 (not .def_25))) (let ((.def_27 (and .def_26 .def_24 .def_22 .def_20 .def_18 .def_16))) (let ((.def_28 (<= d 9))) (let ((.def_29 (<= 0 d))) (let ((.def_30 (and .def_29 .def_28))) (let ((.def_31 (<= c 9))) (let ((.def_32 (<= 0 c))) (let ((.def_33 (and .def_32 .def_31))) (let ((.def_34 (<= b 9))) (let ((.def_35 (<= 0 b))) (let ((.def_36 (and .def_35 .def_34))) (let ((.def_37 (<= a 9))) (let ((.def_38 (<= 0 a))) (let ((.def_39 (and .def_38 .def_37))) (let ((.def_40 (and .def_39 .def_36 .def_33 .def_30 .def_27 .def_14 .def_12 .def_10 .def_8 .def_6))) .def_40))))))))))))))))))))))))))))))))))))))))))
+(check-sat)
