@@ -9,8 +9,8 @@ MODULE main
 		reaction : {r1, r2, r3, r4, none};
 
 	ASSIGN
-		init(o) := 3;
-		init(c) := 3;
+		init(o) := 6;
+		init(c) := 6;
 		init(co) := 0;
 		init(co2) := 0;
 		init(o2) := 0;
