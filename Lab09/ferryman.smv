@@ -20,16 +20,7 @@ ASSIGN
   init(sheep)    := right;
   init(wolf)    := right;
   init(man)     := right;
-  init(move)    := case
-    man != wolf & man != sheep & man != cabbage: {e};
-    man != wolf & man != sheep: {e, c};
-    man != wolf & man != cabbage: {e, s};
-    man != cabbage & man != sheep: {e, w};
-    man != wolf : {e,c,s};
-    man != sheep : {e,c,w};
-    man != cabbage : {e,w,s};
-    TRUE: {e,c,s,w};
-  esac;
+  init(move)    := {c,s,w};
 
 TRANS
   next(man) != next(cabbage) -> next(move) != c
