@@ -17,9 +17,9 @@ DEFINE
 -- initially everything is on the right bank
 ASSIGN
   init(cabbage) := right;
-  init(sheep)    := left;
+  init(sheep)    := right;
   init(wolf)    := right;
-  init(man)     := left;
+  init(man)     := right;
   init(move)    := case
     man != wolf & man != sheep & man != cabbage: {e};
     man != wolf & man != sheep: {e, c};
