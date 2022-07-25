@@ -60,11 +60,13 @@ TRANS
 	next(cabbage)=cabbage &
 	next(wolf)=wolf
 
-INVAR
-  (wolf = sheep | sheep = cabbage) -> (sheep = man)
-
 -- sheep and wolf must not be left unattended !
+INVAR carry_cabbage -> wolf != sheep
 -- sheep and cabbage must not be left unattended !
+INVAR carry_wolf -> sheep != cabbage
+-- both of the above
+INVAR no_carry -> (wolf != sheep & sheep != cabbage)
+
 DEFINE
   goal := cabbage = left & sheep = left & wolf = left;
 
