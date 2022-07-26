@@ -30,6 +30,8 @@ VAR
   block_b : block(b, a, c);
   block_c : block(c, b, none);
 
+INIT move = move_a
+
 TRANS -- if a block moves, then it will still be clear and its location will
       -- change
   (move = move_a -> next(block_a.clear) &
