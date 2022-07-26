@@ -36,7 +36,7 @@ MODULE main
 		(reaction = r2) -> (next(o) = o - 1 & next(o2) = o2 & next(c) = c - 1 & next(co) = co + 1 & next(co2) = co2)
 
 	TRANS 
-		(reaction = r3) -> (next(o) = o & next(o2) = o2 - 1 & next(c) = c - 1 & next(co) = co + 2 & next(co2) = co2)
+		(reaction = r3) -> (next(o) = o & next(o2) = o2 - 1 & next(c) = c - 2 & next(co) = co + 2 & next(co2) = co2)
 
 	TRANS 
 		(reaction = r4) -> (next(o) = o & next(o2) = o2 - 1 & next(c) = c - 1 & next(co) = co & next(co2) = co2 + 1)
