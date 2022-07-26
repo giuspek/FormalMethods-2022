@@ -1,6 +1,6 @@
 -- Hanoi problem with three poles (left, middle, right)
 -- and four ordered disks d1, d2, d3, d4,
--- disk d1 is the biggest one
+-- disk d1 is the smallest one
 
 MODULE main
 VAR
@@ -29,12 +29,14 @@ DEFINE
 	d4!=d2 &
 	d4!=d3;
 
--- initially all items are on the left pole
+-- initially all items are on the left pole;
+-- the smaller disk makes the first move
 INIT
   d1 = left &
   d2 = left &
   d3 = left &
-  d4 = left;
+  d4 = left & 
+  move_d1;
     
 TRANS
 	(next(clear_d3) = FALSE) -> (next(move) != 3)
