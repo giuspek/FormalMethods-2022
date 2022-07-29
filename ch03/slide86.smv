@@ -1,0 +1,41 @@
+-- http://disi.unitn.it/~rseba/DIDATTICA/fm2022/SLIDES/03-temporalLogics_slides.pdf
+-- Slide 86: AFAGp vs FGp
+
+MODULE main
+VAR
+    -- set of states
+    s : {s0, s1, s2};
+
+    -- state variables
+    p : boolean;
+ASSIGN
+    -- initial states
+    init(s) := s0;
+    
+    -- transition relation
+    next(s) := case
+        s = s0 : {s0, s1};
+        s = s1 : s2;
+        s = s2 : s2;
+    esac;
+
+    -- labeling function
+    p := case
+        s = s0 : TRUE;
+        s = s1 : FALSE;
+        s = s2 : TRUE;
+    esac;
+
+CTLSPEC AF AG p;
+-- specification AF (AG p)  is false
+-- as demonstrated by the following execution sequence
+-- Trace Description: CTL Counterexample 
+-- Trace Type: Counterexample 
+--   -- Loop starts here
+--   -> State: 1.1 <-
+--     s = s0
+--     p = TRUE
+--   -> State: 1.2 <-
+
+LTLSPEC F G p;
+-- specification  F ( G p)  is true
