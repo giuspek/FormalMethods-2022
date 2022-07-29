@@ -1,0 +1,129 @@
+-- http://disi.unitn.it/~rseba/DIDATTICA/fm2022/SLIDES/03-temporalLogics_slides.pdf
+-- Slide 95
+
+MODULE main
+VAR
+    -- set of states
+    s : {s0, s1, s2};
+
+    -- state variables
+    p : boolean;
+    q : boolean;
+ASSIGN
+    -- initial states
+    init(s) := {s0, s2};
+
+    -- transition relation
+    next(s) := case
+        s = s0 : {s0, s1};
+        s = s1 : {s0, s2};
+        s = s2 : s1;
+    esac;
+
+    -- labeling function
+    p := case
+        s = s0 : TRUE;
+        s = s1 : TRUE;
+        s = s2 : FALSE;
+    esac;
+
+    q := case
+        s = s0 : TRUE;
+        s = s1 : FALSE;
+        s = s2 : TRUE;
+    esac;
+
+
+-- (a)
+CTLSPEC AF !q; -- FALSE: loop in s0
+-- specification AF !q  is false
+-- as demonstrated by the following execution sequence
+-- Trace Description: CTL Counterexample 
+-- Trace Type: Counterexample 
+--   -- Loop starts here
+--   -> State: 1.1 <-
+--     s = s0
+--     p = TRUE
+--     q = TRUE
+--   -> State: 1.2 <-
+
+-- (b)
+CTLSPEC EG q;
+-- -- specification EG q  is false
+-- -- as demonstrated by the following execution sequence
+-- Trace Description: CTL Counterexample 
+-- Trace Type: Counterexample 
+--   -> State: 2.1 <-
+--     s = s2
+--     p = FALSE
+--     q = TRUE
+
+CTLSPEC AG AF p;
+-- specification AG (AF p)  is true
+
+CTLSPEC AG AF q;
+-- specification AG (AF q)  is true
+
+CTLSPEC AG AF !p;
+-- specification AG (AF !p)  is false
+-- as demonstrated by the following execution sequence
+-- Trace Description: CTL Counterexample 
+-- Trace Type: Counterexample 
+--   -> State: 3.1 <-
+--     s = s2
+--     p = FALSE
+--     q = TRUE
+--   -- Loop starts here
+--   -> State: 3.2 <-
+--     s = s1
+--     p = TRUE
+--     q = FALSE
+--   -> State: 3.3 <-
+--     s = s0
+--     q = TRUE
+--   -> State: 3.4 <-
+--     s = s1
+--     q = FALSE
+
+CTLSPEC AG AF !q;
+-- specification AG (AF !q)  is false
+-- as demonstrated by the following execution sequence
+-- Trace Description: CTL Counterexample 
+-- Trace Type: Counterexample 
+--   -> State: 4.1 <-
+--     s = s2
+--     p = FALSE
+--     q = TRUE
+--   -> State: 4.2 <-
+--     s = s1
+--     p = TRUE
+--     q = FALSE
+--   -- Loop starts here
+--   -> State: 4.3 <-
+--     s = s0
+--     q = TRUE
+--   -> State: 4.4 <-
+
+-- (c)
+CTLSPEC ((AG AF p | AG AF q) & (AG AF !p | AG AF !q)) -> q;
+-- specification (((AG (AF p) | AG (AF q)) & (AG (AF !p) | AG (AF !q))) -> q)  is true
+
+-- (d)
+CTLSPEC AF EG (p & q);
+-- specification AF (EG (p & q))  is false
+-- as demonstrated by the following execution sequence
+-- Trace Description: CTL Counterexample 
+-- Trace Type: Counterexample 
+--   -- Loop starts here
+--   -> State: 1.1 <-
+--     s = s2
+--     p = FALSE
+--     q = TRUE
+--   -> State: 1.2 <-
+--     s = s1
+--     p = TRUE
+--     q = FALSE
+--   -> State: 1.3 <-
+--     s = s2
+--     p = FALSE
+--     q = TRUE
